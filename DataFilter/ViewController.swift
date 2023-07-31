@@ -44,11 +44,22 @@ extension ViewController:UITableViewDataSource {
         }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell") as! UITableViewCell
-        return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell")
+        if (!(searching ?? false)) {
+            cell?.textLabel?.text = dataSourceArray[indexPath.row]
+        }else {
+            cell?.textLabel?.text = filteredArray[indexPath.row]
+        }
+        return cell!
     }
 }
 
 extension ViewController: UISearchBarDelegate {
-    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchText.isEmpty) {
+            filteredArray = dataSourceArray
+        }else {
+            filteredArray = dataSourceArray.filter{$0.contains(searchText)}
+        }
+    }
 }
